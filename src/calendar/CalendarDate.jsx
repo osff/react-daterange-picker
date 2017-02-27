@@ -168,6 +168,7 @@ const CalendarDate = React.createClass({
     let color;
     let amColor;
     let pmColor;
+    let startOrEnd;
     let states = dateRangesForDate(date);
     let numStates = states.count();
     let cellStyle = {};
@@ -175,6 +176,7 @@ const CalendarDate = React.createClass({
 
     let highlightModifier;
     let selectionModifier;
+    let dateLabelModifier;
 
     if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
         || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
@@ -186,6 +188,9 @@ const CalendarDate = React.createClass({
     } else if (isInSelectedRange || isInHighlightedRange) {
       selectionModifier = 'segment';
     }
+
+    startOrEnd = selectionModifier === 'start' || selectionModifier === 'end';
+    dateLabelModifier = { 'startOrEnd' : startOrEnd };
 
     if (isHighlightedDate) {
       highlightModifier = 'single';
@@ -232,7 +237,7 @@ const CalendarDate = React.createClass({
           </div>}
         {numStates === 1 &&
           <div className={this.cx({element: "FullDateStates"})} style={style} />}
-        <span className={this.cx({element: "DateLabel"})}>{date.format('D')}</span>
+        <span className={this.cx({element: "DateLabel", modifiers: dateLabelModifier})}>{date.format('D')}</span>
         {selectionModifier ? <CalendarSelection modifier={selectionModifier} pending={pending} /> : null}
         {highlightModifier ? <CalendarHighlight modifier={highlightModifier} /> : null}
       </td>
