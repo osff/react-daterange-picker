@@ -119,12 +119,8 @@ const CalendarDate = React.createClass({
   getBemModifiers() {
     let {date, firstOfMonth, isToday: today} = this.props;
 
-    let otherMonth = false;
+    const otherMonth = this.props.otherMonth;
     let weekend = false;
-
-    if (date.month() !== firstOfMonth.month()) {
-      otherMonth = true;
-    }
 
     if (date.day() === 0 || date.day() === 6) {
       weekend = true;
@@ -164,6 +160,17 @@ const CalendarDate = React.createClass({
     let bemModifiers = this.getBemModifiers();
     let bemStates = this.getBemStates();
     let pending = isInHighlightedRange;
+
+    if (!this.props.showOtherMonthDays && bemModifiers.otherMonth) {
+      cellStyle = {
+        cursor: 'default',
+      }
+      return (
+        <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
+          style={cellStyle}
+        ></td>
+      );
+    }
 
     let color;
     let amColor;

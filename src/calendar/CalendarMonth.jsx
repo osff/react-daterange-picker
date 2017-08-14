@@ -53,15 +53,34 @@ const CalendarMonth = React.createClass({
     let isSelectedDate;
     let isSelectedRangeStart;
     let isSelectedRangeEnd;
+    let otherMonth = false;
 
-    if (!hideSelection && value && moment.isMoment(value) && value.isSame(d, 'day')) {
-      isSelectedDate = true;
-    } else if (!hideSelection && value && isMomentRange(value) && value.contains(d)) {
-      isInSelectedRange = true;
-
-      isSelectedRangeStart = value.start.isSame(d, 'day');
-      isSelectedRangeEnd = value.end.isSame(d, 'day');
+    if (d.month() !== this.props.firstOfMonth.month()) {
+      otherMonth = true;
     }
+
+    if (this.props.showOtherMonthDays || otherMonth == false) {
+      if (!hideSelection && value && moment.isMoment(value) && value.isSame(d, 'day')) {
+        isSelectedDate = true;
+      } else if (!hideSelection && value && isMomentRange(value) && value.contains(d)) {
+        isInSelectedRange = true;
+
+        isSelectedRangeStart = value.start.isSame(d, 'day');
+        isSelectedRangeEnd = value.end.isSame(d, 'day');
+      }
+    } else {
+      isInSelectedRange = false;
+      if (this.props.value && !hideSelection) {
+        if ((d >= this.props.value.start && d <= this.props.value.end) ||
+            (d.month() == this.props.value.start.month() ||
+            d.month() == this.props.value.end.month())
+        ) {
+          isInSelectedRange = true;
+          console.log(`${d._d} is selected`);
+        }
+      }
+    }
+
 
     return (
       <CalendarDate
@@ -77,6 +96,7 @@ const CalendarMonth = React.createClass({
         isSelectedRangeEnd={isSelectedRangeEnd}
         isInSelectedRange={isInSelectedRange}
         date={d}
+        otherMonth={otherMonth}
         {...props} />
     );
   },

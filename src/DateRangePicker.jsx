@@ -517,6 +517,7 @@ const DateRangePicker = React.createClass({
       dateRangesForDate: this.dateRangesForDate,
       dateComponent: CalendarDate,
       locale: this.props.locale,
+      showOtherMonthDays:  this.props.showOtherMonthDays != undefined ? this.props.showOtherMonthDays : true,
     };
 
     return <CalendarMonth {...props} />;
